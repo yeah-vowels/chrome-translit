@@ -66,8 +66,8 @@ function transcribe(oldTextContent, unicodeDict) {
 	}
 
 	// if touch latin is disabled in the preferences, skip
-	if(!touchLatin && c.match(/\p{Script=Latin}/u)) {
-//	if(c.match(/\p{Script=Latin}/u)) {
+	// typeof(touchLatin) is string
+	if(c.match(/\p{Script=Latin}/u) && touchLatin === "false") {
 	    newTextContent += c
 	    continue
 	} 

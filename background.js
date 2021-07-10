@@ -18,7 +18,18 @@
 
 /* chrome.browserAction.onClicked.addListener(function(tab) {
     mannifyPage(sessionDict)
-}) */
+    }) */
+
+// intial preferences
+chrome.storage.sync.get(["on", "touchLatin"], function(data) {
+    if (data.on == undefined) {
+	chrome.tabs.executeScript(null, { code: "console.log('on is undefined')"})
+	chrome.storage.sync.set( {on: true} )
+    }
+    if (data.touchLatin == undefined) {
+	chrome.storage.sync.set( {touchLatin: false} )
+    }
+})
 
 // needs permissions: <all_urls>
 chrome.webNavigation.onCompleted.addListener(function(tab) {
@@ -36,7 +47,7 @@ chrome.webNavigation.onCompleted.addListener(function(tab) {
     
     // depending on content
     chrome.storage.sync.get(["on", "touchLatin"], function(data) {
-	console.log("background data.on: " + data.on)
+	chrome.tabs.executeScript(null, { code: "console.log('data.on: " + data.on + "')"})
 	if(data.on) {
 	    transcribePage(tab, data.touchLatin)
 	}
