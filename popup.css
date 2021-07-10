@@ -1,0 +1,12 @@
+label {
+    position: relative;
+    float:left;
+    width: 100px;
+}
+button {
+    margin: auto;
+}
+/*.mdc-list-item {
+    height:40 pt;
+    background-color:blue;
+}*/

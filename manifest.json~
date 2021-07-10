@@ -1,0 +1,31 @@
+{
+    "name": "translit",
+    "version": "1.0",
+    
+    "manifest_version": 2,
+
+    "permissions": [
+	"activeTab",
+	"tabs", // necessary?
+	"webNavigation",
+	"contextMenus",
+	"<all_urls>"
+    ],
+
+    "background": {
+	"scripts": ["background.js"],
+	"persistent": true
+    },
+
+    "browser_action": {
+	"default_title": "translit page"//,
+//	"default_popup": "popup.html"
+    }//,
+    
+//    "content_scripts": [
+//	{
+//	    "matches": ["<all_urls>"], 
+//	    "js": ["dict-chinese.js", "main.js"]
+//	}
+  //  ]
+}

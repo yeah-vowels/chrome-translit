@@ -1,0 +1,38 @@
+{
+    "name": "translit",
+    "version": "1.0",
+    
+    "manifest_version": 2,
+
+    "icons": {
+	"16": "icon/icon16.png",
+	"48": "icon/icon48.png",
+	"128": "icon/icon128.png"
+    },
+    
+    "permissions": [
+	"activeTab",
+	"<all_urls>",
+	"contextMenus",
+	"storage",
+	"tabs", // necessary?
+	"webNavigation"
+    ],
+
+    "background": {
+	"scripts": ["shared.js", "background.js"],
+	"persistent": true
+    },
+
+    "browser_action": {
+	"default_title": "translit page",
+	"default_popup": "popup.html"
+    }//,
+    
+//    "content_scripts": [
+//	{
+//	    "matches": ["<all_urls>"], 
+//	    "js": ["dict-chinese.js", "main.js"]
+//	}
+  //  ]
+}

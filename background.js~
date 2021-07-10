@@ -1,0 +1,126 @@
+/* chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+      files: ['dict-chinese.js', 'main.js']
+  });
+});
+*/
+
+// a random dict for this session
+/*var dicts = ["dict/dict-afrikaans.js", "dict/dict-albanian.js", "dict/dict-amharic.js", "dict/dict-arabic.js", "dict/dict-armenian.js", "dict/dict-azerbaijani.js", "dict/dict-basque.js", "dict/dict-belarussian.js", "dict/dict-bengali.js", "dict/dict-bosnian.js", "dict/dict-bulgarian.js", "dict/dict-catalan.js", "dict/dict-cebuano.js", "dict/dict-chichewa.js", "dict/dict-chinese.js", "dict/dict-corsican.js", "dict/dict-croatian.js", "dict/dict-czech.js", "dict/dict-danish.js", "dict/dict-dutch.js", "dict/dict-english.js", "dict/dict-esperanto.js", "dict/dict-estonian.js", "dict/dict-filipino.js", "dict/dict-finnish.js", "dict/dict-french.js", "dict/dict-frisian.js", "dict/dict-galician.js", "dict/dict-georgian.js", "dict/dict-german.js", "dict/dict-greek.js", "dict/dict-gujarati.js", "dict/dict-haitian.js", "dict/dict-hausa.js", "dict/dict-hawaiian.js", "dict/dict-hebrew6000.js", "dict/dict-hebrew.js", "dict/dict-hindi.js", "dict/dict-hmong.js", "dict/dict-hungarian.js", "dict/dict-icelandic.js", "dict/dict-indonesian.js", "dict/dict-irish.js", "dict/dict-italian.js", "dict/dict-japanese.js", "dict/dict-javanese.js", "dict/dict-kannada.js", "dict/dict-kazakh.js", "dict/dict-khmer.js", "dict/dict-kinyarwanda.js", "dict/dict-korean.js", "dict/dict-kurdish.js", "dict/dict-kyrgyz.js", "dict/dict-lao.js", "dict/dict-latin.js", "dict/dict-latvian.js", "dict/dict-lithuanian.js", "dict/dict-luxembourgish.js", "dict/dict-macedonian.js", "dict/dict-malagasy.js", "dict/dict-malayalam.js", "dict/dict-malaysian.js", "dict/dict-maltese.js", "dict/dict-maori.js", "dict/dict-mongolian.js", "dict/dict-myanmar.js", "dict/dict-nepali.js", "dict/dict-norwegian.js", "dict/dict-pashto.js", "dict/dict-persian.js", "dict/dict-polish.js", "dict/dict-portuguese.js", "dict/dict-punjabi.js", "dict/dict-romanian.js", "dict/dict-russian.js", "dict/dict-samoan.js", "dict/dict-scots-gaelic.js", "dict/dict-serbian.js", "dict/dict-sesotho.js", "dict/dict-shona.js", "dict/dict-sindhi.js", "dict/dict-sinhala.js", "dict/dict-slovak.js", "dict/dict-slovenian.js", "dict/dict-somali.js", "dict/dict-sundanese.js", "dict/dict-swahili.js", "dict/dict-swedish.js", "dict/dict-tajik.js", "dict/dict-tamil.js", "dict/dict-tatar.js", "dict/dict-telugu.js", "dict/dict-thai.js", "dict/dict-turkish.js", "dict/dict-ukranian.js", "dict/dict-urdu.js", "dict/dict-uzbek.js", "dict/dict-vietnamese.js", "dict/dict-xhosa.js", "dict/dict-yiddish.js", "dict/dict-yoruba.js", "dict/dict-zulu.js"] */
+// dicts =  ['dict/dict-chinese.js', 'dict/dict-lao.js', 'dict/dict-hebrew6000.js']
+
+//var r = Math.floor(Math.random() * dicts.length)
+//var sessionDict = dicts[r]
+//localStorage.sessionDict = "dict/dict-english.js"
+//localStorage.sessionDict = "dict/dict-chinese.js"
+
+
+// see https://github.com/GoogleChrome/chrome-extensions-samples/blob/main/mv2-archive/api/browserAction/make_page_red/background.js
+
+/* chrome.browserAction.onClicked.addListener(function(tab) {
+    mannifyPage(sessionDict)
+}) */
+
+// needs permissions: <all_urls>
+chrome.webNavigation.onCompleted.addListener(function(tab) {
+
+    // if not in parent frame, break off.
+    // see https://stackoverflow.com/questions/37779142/chrome-webnavigation-oncompleted-event-firing-multiple-times
+    if (tab.frameId != 0) {
+	return;
+    }
+
+    // say hello
+    chrome.tabs.executeScript(null, { code: "console.log('chrome.webNavigation.onCompleted in frameId 0')"})
+
+//    mannifyPageMultidict()
+    
+    // depending on content
+    transcribePage2(tab)
+    
+    //    transcribePage("dict/dict-chinese.js")
+    //  transcribePage("dict/dict-hebrew6000.js")
+    
+    // old check
+//    if(localStorage.sessionDict == "dict/dict-english.js") {
+
+//    } else if (localStorage.sessionDict != "off") {
+	//	mannifyNonEnglishPage(localStorage.sessionDict)
+//	transcribePage()
+//    } 
+
+    // in future?
+    //    mannifyPageMultidictTranscribe() 
+
+    // old
+    //    mannifyPage(localStorage.sessionDict)
+})
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+    transcribePage2(tab)
+})
+
+function transcribePage2(tab) {
+    executeScripts(null, [
+	//	{ file: 'unicodedict-lm.js' },
+	
+	{ file: 'lm-names-and-google.js' },
+	{ file: 'kanjidict.js' },
+	{ code: 'var tab_url = "' + tab.url + '"' },
+//	{ code: 'var touch_latin = "' + touch_latin + '"' },
+//	{ file: 'latin-to.js' },
+	{ file: 'main.js'}
+    ])
+}
+/*
+function transcribePage() {
+    executeScripts(null, [
+	//	{ file: 'unicodedict.js' },
+	{ file: 'unicodedict-lm.js' },
+	{ file: 'main4.js'}
+    ])
+}
+
+function mannifyNonEnglishPage(dict) {
+    executeScripts(null, [
+	{ file: dict },
+	{ code: "sessionDict = '" + localStorage.sessionDict + "'"},
+	{ file: 'main3.js'}
+    ])
+}
+
+function mannifyPageMultidict() {
+    executeScripts(null, [
+	{ file: 'multidict.js' },
+	{ file: 'main2.js' }
+    ])
+}
+
+function mannifyPage(dict) {
+    executeScripts(null, [
+	{ file: dict },
+	{ file: 'main.js' }
+    ])
+}    
+*/
+
+// to preserve state between various js scripts, see https://stackoverflow.com/questions/21535233/injecting-multiple-scripts-through-executescript-in-google-chrome
+function executeScripts(tabId, injectDetailsArray)
+{
+    function createCallback(tabId, injectDetails, innerCallback) {
+        return function () {
+            chrome.tabs.executeScript(tabId, injectDetails, innerCallback);
+        };
+    }
+
+    var callback = null;
+
+    for (var i = injectDetailsArray.length - 1; i >= 0; --i)
+        callback = createCallback(tabId, injectDetailsArray[i], callback);
+
+    if (callback !== null)
+        callback();   // execute outermost function
+}
+
+
